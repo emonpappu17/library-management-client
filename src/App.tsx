@@ -7,11 +7,16 @@ function App() {
 
   return (
     <>
-      <Navbar></Navbar>
-      <div className="container mx-auto">
-        <Outlet></Outlet>
+      <div className="min-h-screen  flex flex-col">
+        <Navbar></Navbar>
+
+        {/* <Outlet></Outlet> */}
+
+        <div className="container mx-auto">
+          <Outlet></Outlet>
+        </div>
+        <Footer></Footer>
       </div>
-      <Footer></Footer>
     </>
   )
 }

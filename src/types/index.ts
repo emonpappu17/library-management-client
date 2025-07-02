@@ -10,3 +10,9 @@ export interface IBook {
     createdAt: string,
     updatedAt: string,
 }
+
+export interface ApiResponse<T> {
+    data: T,
+    message?: string,
+    success: boolean
+}
