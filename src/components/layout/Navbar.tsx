@@ -47,7 +47,7 @@ const Navbar = () => {
 
     return (
         <nav className=" border  bg-white shadow-lg border-b border-gray-200">
-            <div className="navbar container mx-auto">
+            <div className="navbar max-w-7xl mx-auto">
                 <div className="navbar-start ">
                     {/* Logo */}
                     <Link to="/" className="flex items-center space-x-3 text-gray-900 hover:text-blue-600 transition-colors">
