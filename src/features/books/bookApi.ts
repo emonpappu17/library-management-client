@@ -7,7 +7,7 @@ export const booksApi = createApi({
     reducerPath: 'booksApi',
     baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api" }),
     endpoints: (builder) => ({
-        getBooks: builder.query<IApiResponse<IBook>, void>({
+        getBooks: builder.query<IApiResponse<IBook[]>, void>({
             query: () => "books"
         })
     })

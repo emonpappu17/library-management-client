@@ -46,7 +46,7 @@ const Navbar = () => {
     </>
 
     return (
-        <nav className=" border  bg-white shadow-lg border-b border-gray-200">
+        <nav className="  bg-white drop-shadow-md sticky top-0 z-20">
             <div className="navbar max-w-7xl mx-auto">
                 <div className="navbar-start ">
                     {/* Logo */}

@@ -12,7 +12,7 @@ function App() {
 
         {/* <Outlet></Outlet> */}
 
-        <div className="container mx-auto">
+        <div className="flex-1">
           <Outlet></Outlet>
         </div>
         <Footer></Footer>

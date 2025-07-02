@@ -7,11 +7,9 @@ import BorrowSummaryPage from "../pages/BorrowSummaryPage";
 const router = createBrowserRouter([
   {
     path: "/",
-    // element: <div>Hello World</ div >,
     Component: App,
     children: [
       {
-        // path: 'books',
         index: true,
         Component: BooksPage,
       },
