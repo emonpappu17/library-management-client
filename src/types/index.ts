@@ -12,7 +12,8 @@ export interface IBook {
 }
 
 export interface IApiResponse<T> {
-    data: T,
+    data?: T,
+    error?: object,
     message?: string,
     success: boolean
 }

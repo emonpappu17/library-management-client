@@ -1,63 +1,69 @@
 import { Link } from "react-router";
-import { useGetBooksQuery } from "../features/books/bookApi";
+import { useDeleteBookMutation, useGetBooksQuery } from "../features/books/bookApi";
 import type { IBook } from "../types";
 import { BookOpen, Edit, Eye, Plus, Trash2 } from "lucide-react";
 import Button from "../components/ui/Button";
 import Lottie from "lottie-react";
 import loader from '../assets/loader.json'
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 
 const BooksPage = () => {
     const { data, isLoading, isError } = useGetBooksQuery(undefined);
+    const [deleteBook] = useDeleteBookMutation()
     const books = (data?.data as IBook[]) || [];
     // const books = (data?.data as IBook[]) || [];
     // const isError = true;
 
     console.log(books);
 
+    // ✅ 1. Delete Book
     const handleDelete = (id: string, title: string) => {
-        console.log(id);
-
-        // Swal.fire({
-        //     title: "Are you sure?",
-        //     text: "You won't be able to revert this!",
-        //     icon: "warning",
-        //     showCancelButton: true,
-        //     confirmButtonColor: "#3085d6",
-        //     cancelButtonColor: "#d33",
-        //     confirmButtonText: "Yes, delete it!"
-        // }).then((result) => {
-        //     if (result.isConfirmed) {
-        //         Swal.fire({
-        //             title: "Deleted!",
-        //             text: "Your file has been deleted.",
-        //             icon: "success"
-        //         });
-        //     }
-        // });
-
-        Swal.fire({
-            title: "Delete this book?",
-            text: `Are you sure you want to remove "${title}" from the library? This action cannot be undone.`,
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "Yes, delete it",
-            cancelButtonText: "Cancel",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                //onConfirm(); // your delete API function
-                Swal.fire({
-                    title: "Deleted!",
-                    text: `"${title}" has been successfully removed.`,
-                    icon: "success",
-                    timer: 2000,
-                    showConfirmButton: false,
-                });
-            }
-        });
+        try {
+            Swal.fire({
+                title: "Delete this book?",
+                text: `Are you sure you want to remove "${title}" from the library? This action cannot be undone.`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, delete it",
+                cancelButtonText: "Cancel",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const res = await deleteBook(id).unwrap();
+                    console.log('delete res-->', res);
+                    if (res.success) {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: `"${title}" has been successfully removed.`,
+                            icon: "success",
+                            timer: 2000,
+                            showConfirmButton: false,
+                        });
+                        toast.error("check check")
+                    } else {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Failed to remove. Please try again.",
+                            icon: "error",
+                            timer: 2000,
+                            showConfirmButton: false,
+                        });
+                    }
+                }
+            });
+        } catch (error) {
+            console.log(error);
+            Swal.fire({
+                title: "Error!",
+                text: "Failed to remove. Please try again.",
+                icon: "error",
+                timer: 2000,
+                showConfirmButton: false,
+            });
+        }
     }
 
     // ✅ 1. Loading State
@@ -180,11 +186,14 @@ const BooksPage = () => {
                                                 <Link to={`/edit-book/${book._id}`}>
                                                     <Button size="sm" variant="primary" icon={Edit} />
                                                 </Link>
-                                                {book.available && (
-                                                    <Link to={`/borrow/${book._id}`}>
-                                                        <Button size="sm" variant="success" icon={BookOpen} />
-                                                    </Link>
-                                                )}
+                                                {book.available ?
+                                                    (
+                                                        <Link to={`/borrow/${book._id}`}>
+                                                            <Button size="sm" variant="success" icon={BookOpen} />
+                                                        </Link>
+                                                    ) :
+                                                    <Button size="sm" variant="success" icon={BookOpen} onClick={() => { toast.error("Sorry, this book is currently unavailable") }} />
+                                                }
                                                 <Button
                                                     size="sm"
                                                     variant="danger"

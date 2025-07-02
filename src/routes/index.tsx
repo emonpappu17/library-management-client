@@ -3,6 +3,7 @@ import App from "../App";
 import BooksPage from "../pages/BooksPage";
 import CreateBookPage from "../pages/CreateBookPage";
 import BorrowSummaryPage from "../pages/BorrowSummaryPage";
+import NotFound from "../pages/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -24,9 +25,14 @@ const router = createBrowserRouter([
       {
         path: "borrow-summary",
         Component: BorrowSummaryPage,
-      }
-    ]
+      },
+
+    ],
   },
+  {
+    path: '*',
+    Component: NotFound
+  }
 ]);
 
 export default router;
