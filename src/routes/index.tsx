@@ -13,10 +13,10 @@ const router = createBrowserRouter([
         index: true,
         Component: BooksPage,
       },
-      {
-        path: 'books',
-        Component: BooksPage,
-      },
+      // {
+      //   path: 'books',
+      //   Component: BooksPage,
+      // },
       {
         path: "create-book",
         Component: CreateBookPage,

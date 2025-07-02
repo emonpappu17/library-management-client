@@ -3,18 +3,88 @@ import { useGetBooksQuery } from "../features/books/bookApi";
 import type { IBook } from "../types";
 import { BookOpen, Edit, Eye, Plus, Trash2 } from "lucide-react";
 import Button from "../components/ui/Button";
+import Lottie from "lottie-react";
+import loader from '../assets/loader.json'
+import Swal from "sweetalert2";
+
 
 const BooksPage = () => {
     const { data, isLoading, isError } = useGetBooksQuery(undefined);
-    const books = data?.data || [];
+    const books = (data?.data as IBook[]) || [];
+    // const books = (data?.data as IBook[]) || [];
+    // const isError = true;
+
     console.log(books);
 
-    const handleDelete = (id: string) => {
-        // if (confirm("Are you sure you want to delete this book?")) {
-        //     deleteBook(id)
-        // }
+    const handleDelete = (id: string, title: string) => {
         console.log(id);
+
+        // Swal.fire({
+        //     title: "Are you sure?",
+        //     text: "You won't be able to revert this!",
+        //     icon: "warning",
+        //     showCancelButton: true,
+        //     confirmButtonColor: "#3085d6",
+        //     cancelButtonColor: "#d33",
+        //     confirmButtonText: "Yes, delete it!"
+        // }).then((result) => {
+        //     if (result.isConfirmed) {
+        //         Swal.fire({
+        //             title: "Deleted!",
+        //             text: "Your file has been deleted.",
+        //             icon: "success"
+        //         });
+        //     }
+        // });
+
+        Swal.fire({
+            title: "Delete this book?",
+            text: `Are you sure you want to remove "${title}" from the library? This action cannot be undone.`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it",
+            cancelButtonText: "Cancel",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                //onConfirm(); // your delete API function
+                Swal.fire({
+                    title: "Deleted!",
+                    text: `"${title}" has been successfully removed.`,
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false,
+                });
+            }
+        });
     }
+
+    // ✅ 1. Loading State
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-[60vh]">
+                <Lottie className="size-20" animationData={loader} />
+            </div>
+        );
+    }
+
+    // ✅ 2. Error State
+    if (isError) {
+        return (
+            <div className="flex flex-col justify-center items-center h-[60vh] text-center">
+                <h2 className="text-xl font-semibold text-red-600">Something went wrong</h2>
+                <p className="text-gray-500 mt-2">
+                    Failed to fetch books. Please try again.
+                </p>
+                <Button variant="primary" className="mt-4" onClick={() => window.location.reload()}>
+                    Retry
+                </Button>
+            </div>
+        );
+    }
+
+    // ✅ 3. Main Return (Normal + Empty State)
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 ">
             <div className="flex justify-between items-center mb-8">
@@ -99,20 +169,19 @@ const BooksPage = () => {
                                                 >
                                                     {book.available ? 'Available' : 'Unavailable'}
                                                 </span>
-
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div className="flex space-x-2">
-                                                <Link to={`/books/${book.id}`}>
+                                                <Link to={`/books/${book._id}`}>
                                                     <Button size="sm" variant="secondary" icon={Eye} />
 
                                                 </Link>
-                                                <Link to={`/edit-book/${book.id}`}>
+                                                <Link to={`/edit-book/${book._id}`}>
                                                     <Button size="sm" variant="primary" icon={Edit} />
                                                 </Link>
                                                 {book.available && (
-                                                    <Link to={`/borrow/${book.id}`}>
+                                                    <Link to={`/borrow/${book._id}`}>
                                                         <Button size="sm" variant="success" icon={BookOpen} />
                                                     </Link>
                                                 )}
@@ -120,7 +189,7 @@ const BooksPage = () => {
                                                     size="sm"
                                                     variant="danger"
                                                     icon={Trash2}
-                                                // onClick={() => handleDeleteClick(book)}
+                                                    onClick={() => handleDelete(book._id, book.title)}
                                                 />
                                             </div>
                                         </td>
@@ -131,8 +200,6 @@ const BooksPage = () => {
                     </div>
                 </div>
             )}
-
-
         </div>
     );
 };
