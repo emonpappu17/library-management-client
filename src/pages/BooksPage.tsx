@@ -7,16 +7,19 @@ import Lottie from "lottie-react";
 import loader from '../assets/loader.json'
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import { useAppDispatch } from "../store/hook";
+import { openModal } from "../features/modal/modalSlice";
+import BookModals from "../components/books/BookModals";
 
 
 const BooksPage = () => {
     const { data, isLoading, isError } = useGetBooksQuery(undefined);
     const [deleteBook] = useDeleteBookMutation()
     const books = (data?.data as IBook[]) || [];
-    // const books = (data?.data as IBook[]) || [];
-    // const isError = true;
 
     console.log(books);
+
+    const dispatch = useAppDispatch();
 
     // ✅ 1. Delete Book
     const handleDelete = (id: string, title: string) => {
@@ -42,7 +45,6 @@ const BooksPage = () => {
                             timer: 2000,
                             showConfirmButton: false,
                         });
-                        toast.error("check check")
                     } else {
                         Swal.fire({
                             title: "Error!",
@@ -186,11 +188,21 @@ const BooksPage = () => {
                                                 <Link to={`/edit-book/${book._id}`}>
                                                     <Button size="sm" variant="primary" icon={Edit} />
                                                 </Link>
+
+                                                {/* Borrow Modal */}
                                                 {book.available ?
                                                     (
-                                                        <Link to={`/borrow/${book._id}`}>
-                                                            <Button size="sm" variant="success" icon={BookOpen} />
-                                                        </Link>
+                                                        // <Link to={`/borrow/${book._id}`}>
+                                                        //     <Button size="sm" variant="success" icon={BookOpen} />
+                                                        // </Link>
+
+                                                        <Button
+                                                            size="sm"
+                                                            variant="success"
+                                                            icon={BookOpen}
+                                                            onClick={() => dispatch(openModal({ type: "borrow", book: book }))}
+                                                        />
+
                                                     ) :
                                                     <Button size="sm" variant="success" icon={BookOpen} onClick={() => { toast.error("Sorry, this book is currently unavailable") }} />
                                                 }
@@ -209,6 +221,8 @@ const BooksPage = () => {
                     </div>
                 </div>
             )}
+
+            <BookModals></BookModals>
         </div>
     );
 };
