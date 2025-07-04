@@ -185,9 +185,16 @@ const BooksPage = () => {
                                                     <Button size="sm" variant="secondary" icon={Eye} />
 
                                                 </Link>
-                                                <Link to={`/edit-book/${book._id}`}>
+                                                {/* <Link to={`/edit-book/${book._id}`}>
                                                     <Button size="sm" variant="primary" icon={Edit} />
-                                                </Link>
+                                                </Link> */}
+                                                <Button
+                                                    size="sm"
+                                                    variant="primary"
+                                                    icon={Edit}
+                                                    onClick={() => dispatch(openModal({ type: "edit", book: book }))}
+                                                />
+
 
                                                 {/* Borrow Modal */}
                                                 {book.available ?

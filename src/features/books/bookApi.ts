@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { IAddBook, IApiResponse, IBook } from '../../types';
+import type { IAddBook, IApiResponse, IBook, IUpdateBook } from '../../types';
 
 export const booksApi = createApi({
     reducerPath: 'booksApi',
@@ -30,11 +30,23 @@ export const booksApi = createApi({
                 body: book
             }),
             invalidatesTags: ["Book"]
-        })
+        }),
+
+        // updateBook
+        updateBook: builder.mutation<IApiResponse<IBook>, IUpdateBook>({
+            query: ({ id, ...book }) => ({
+                url: `books/${id}`,
+                method: "PUT",
+                body: book
+            }),
+            invalidatesTags: ["Book"]
+        }),
+
+
 
     })
 })
 
 
-export const { useGetBooksQuery, useDeleteBookMutation, useAddBookMutation } = booksApi;
+export const { useGetBooksQuery, useDeleteBookMutation, useAddBookMutation, useUpdateBookMutation } = booksApi;
 

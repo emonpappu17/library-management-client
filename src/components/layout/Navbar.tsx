@@ -6,7 +6,7 @@ const Navbar = () => {
 
     const navLinks = <>
         <NavLink
-            to="/"
+            to="/books"
             className={({ isActive }) =>
                 `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${isActive
                     ? 'bg-blue-600 text-white shadow-md'
@@ -50,7 +50,7 @@ const Navbar = () => {
             <div className="navbar max-w-7xl mx-auto">
                 <div className="navbar-start ">
                     {/* Logo */}
-                    <Link to="/" className="flex items-center space-x-3 text-gray-900 hover:text-blue-600 transition-colors">
+                    <Link to="/books" className="flex items-center space-x-3 text-gray-900 hover:text-blue-600 transition-colors">
                         <BookOpen className="h-8 w-8 text-blue-600" />
                         <span className="md:text-xl text-[18px] font-bold">Library System</span>
                     </Link>

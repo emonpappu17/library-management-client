@@ -111,14 +111,17 @@ import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 
 import { closeModal } from "../../features/modal/modalSlice";
-import BorrowBookForm from "./BorrowBookForm";
+import BorrowBookForm from "./borrowModal/BorrowBookForm";
+import EditBookForm from "./editModal/EditBookForm";
 
 const BookModals = () => {
     const dispatch = useAppDispatch();
     const { type, book } = useAppSelector((state) => state.modal);
-    console.log('modal--->', type, book);
+    // console.log('modal--->', type, book);
 
     const isOpen = type !== null;
+
+    if (!book) return
 
     return (
         <Dialog open={isOpen} onClose={() => dispatch(closeModal())} className="relative z-50">
@@ -136,16 +139,30 @@ const BookModals = () => {
                 >
                     <DialogTitle className="text-lg font-semibold text-gray-800">
                         {type === "borrow" && "Borrow Book"}
+                        {type === "edit" && "Edit Book"}
+                        {type === "view" && "View Book"}
                     </DialogTitle>
 
                     <p className="mt-1 text-sm text-gray-600">
-                        {type === "borrow" && "Set quantity and due date to borrow this book"}
+                        {type === "borrow" &&
+                            "Specify how many copies you'd like to borrow and when you'll return them."}
+                        {type === "edit" &&
+                            "Update the book's details including title, author, availability etc."}
+                        {type === "view" &&
+                            "Review the full details of this book. No changes can be made here."}
                     </p>
 
                     {/* Borrow Form */}
                     {type === "borrow" && book && (
                         <div className="mt-4 ">
                             <BorrowBookForm book={book} />
+                        </div>
+                    )}
+
+                    {/* Edit Form */}
+                    {type === "edit" && book && (
+                        <div className="mt-4 ">
+                            <EditBookForm book={book} />
                         </div>
                     )}
                 </DialogPanel>

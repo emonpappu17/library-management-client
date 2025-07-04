@@ -7,8 +7,8 @@ export interface IBook {
     description?: string,
     copies: number,
     available: boolean,
-    createdAt: string,
-    updatedAt: string,
+    createdAt?: string,
+    updatedAt?: string,
 }
 
 export interface IApiResponse<T> {
@@ -26,6 +26,10 @@ export interface IAddBook {
     description?: string;
     copies: number;
     available?: boolean;
+}
+
+export interface IUpdateBook extends IAddBook {
+    id: string;
 }
 
 export interface IBorrow {

@@ -48,7 +48,7 @@ const CreateBookPage = () => {
 
             reset();
             setSelectedGenre(null);
-            navigate("/");
+            navigate("/books");
             toast.success("Book added successfully!");
         } catch (error) {
             const err = error as { data: { message: string } };

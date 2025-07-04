@@ -1,12 +1,12 @@
 import { useForm } from "react-hook-form";
-import { useAppDispatch } from "../../store/hook";
-import type { IBook } from "../../types";
-import { closeModal } from "../../features/modal/modalSlice";
-import Button from "../ui/Button";
-import { useCreateBorrowMutation } from "../../features/borrows/borrowApi";
+import { useAppDispatch } from "../../../store/hook";
+import type { IBook } from "../../../types";
+import { closeModal } from "../../../features/modal/modalSlice";
+import Button from "../../ui/Button";
+import { useCreateBorrowMutation } from "../../../features/borrows/borrowApi";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
-import { useGetBooksQuery } from "../../features/books/bookApi";
+import { useGetBooksQuery } from "../../../features/books/bookApi";
 
 interface Props {
     book: IBook;
@@ -34,17 +34,11 @@ const BorrowBookForm = ({ book }: Props) => {
 
     const onSubmit = async (data: BorrowData) => {
         try {
-            console.log("Borrow Request:", {
-                ...data,
-                book: book._id,
-            });
-
             const borrowData = {
                 ...data,
                 book: book._id,
             }
 
-            // Only UI logic for now
             const res = await borrow(borrowData).unwrap();
             console.log('res borrow-->', res);
 
@@ -107,14 +101,6 @@ const BorrowBookForm = ({ book }: Props) => {
 
             {/* Actions */}
             <div className="flex justify-end gap-3 pt-2">
-                {/* <button
-                    type="button"
-                    onClick={() => dispatch(closeModal())}
-                    className="px-4 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100"
-                >
-                    Cancel
-                </button> */}
-
                 <Button
                     type="button"
                     variant="secondary"
@@ -125,22 +111,14 @@ const BorrowBookForm = ({ book }: Props) => {
                 >
                     Cancel
                 </Button>
-                {/* <button
-                    type="submit"
-                    className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
-                >
-                    Confirm Borrow
-                </button> */}
 
                 <Button
                     type="submit"
                     variant="primary"
-                    // icon={Confirm}
                     loading={isLoading}
                     disabled={isLoading}
                 >
                     {isLoading ? 'Borrowing...' : 'Confirm Borrow'}
-                    {/* Confirm Borrow */}
                 </Button>
             </div>
         </form>
