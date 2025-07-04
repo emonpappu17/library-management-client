@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 type ButtonProps = {
     children?: ReactNode;
     onClick?: () => void;
-    //   type?: ButtonHTMLAttributes<HTMLButtonElement>['type'];
     type?: 'button' | 'submit' | 'reset';
     variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
     size?: 'sm' | 'md' | 'lg';

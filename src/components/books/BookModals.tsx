@@ -1,6 +1,5 @@
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
-
 import { closeModal } from "../../features/modal/modalSlice";
 import BorrowBookForm from "./borrowModal/BorrowBookForm";
 import EditBookForm from "./editModal/EditBookForm";
@@ -8,11 +7,14 @@ import ViewBookDetails from "./viewBook/ViewBookDetails ";
 
 const BookModals = () => {
     const dispatch = useAppDispatch();
-    const { type, book } = useAppSelector((state) => state.modal);
-    // console.log('modal--->', type, book);
 
+    // ✅ Extract modal type and selected book from the Redux modal slice
+    const { type, book } = useAppSelector((state) => state.modal);
+
+    // ✅ Modal is open when `type` is not null (either "view", "edit", or "borrow")
     const isOpen = type !== null;
 
+    // ✅ Guard: Don’t render the modal if there's no book selected
     if (!book) return
 
     return (
@@ -21,14 +23,12 @@ const BookModals = () => {
             <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
 
             {/* Centered Modal Panel */}
-            <div className="fixed inset-0 flex items-center justify-center p-4">
+            <div className="fixed inset-0 flex items-center justify-center p-4 ">
                 <DialogPanel
                     transition
-
-                    // className="w-full max-w-md bg-white rounded-lg shadow-xl px-6 pt-6 pb-4 max-h-[80vh] overflow-y-auto transform transition-all duration-300 ease-out scale-100"
-
-                    className="w-full max-w-md bg-white rounded-lg shadow-xl px-6 pt-6 pb-4 max-h-[80vh] overflow-y-auto duration-300 ease-out transform transition-all data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0 "
+                    className="w-full max-w-md bg-white rounded-lg shadow-xl px-6 pt-6 max-h-[80vh] overflow-y-auto duration-300 ease-out transform transition-all data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0 "
                 >
+                    {/*  Modal Title */}
                     <DialogTitle className="text-lg font-semibold text-gray-800">
                         {type === "borrow" && "Borrow Book"}
                         {type === "edit" && "Edit Book"}
@@ -42,21 +42,21 @@ const BookModals = () => {
                     </p>
 
                     {/* Borrow Form */}
-                    {type === "borrow" && book && (
+                    {type === "borrow" && (
                         <div className="mt-4 ">
                             <BorrowBookForm book={book} />
                         </div>
                     )}
 
                     {/* Edit Form */}
-                    {type === "edit" && book && (
+                    {type === "edit" && (
                         <div className="mt-4 ">
                             <EditBookForm book={book} />
                         </div>
                     )}
 
                     {/* View Book */}
-                    {type === "view" && book && (
+                    {type === "view" && (
                         <div className="mt-4 ">
                             <ViewBookDetails book={book} />
                         </div>

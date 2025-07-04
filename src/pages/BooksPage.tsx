@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import { useDeleteBookMutation, useGetBooksQuery } from "../features/books/bookApi";
-import type { IBook } from "../types";
 import { BookOpen, Edit, Eye, Plus, Trash2 } from "lucide-react";
 import Button from "../components/ui/Button";
 import Lottie from "lottie-react";
@@ -14,16 +13,20 @@ import { useGetBorrowSummaryQuery } from "../features/borrows/borrowApi";
 
 
 const BooksPage = () => {
+    // ✅ Fetch all books
     const { data, isLoading, isError } = useGetBooksQuery(undefined);
+    const books = data?.data || [];
+
+    // ✅ Delete book mutation
     const [deleteBook] = useDeleteBookMutation()
+
+    // ✅ Refetch borrow summary after deletion
     const { refetch } = useGetBorrowSummaryQuery();
-    const books = (data?.data as IBook[]) || [];
 
-    console.log(books);
-
+    // ✅ Redux dispatcher for opening modals
     const dispatch = useAppDispatch();
 
-    // ✅ 1. Delete Book
+    // ✅ 1. Handle book deletion with confirmation
     const handleDelete = (id: string, title: string) => {
         try {
             Swal.fire({
@@ -71,7 +74,7 @@ const BooksPage = () => {
         }
     }
 
-    // ✅ 1. Loading State
+    // ✅ 2. Loading State UI
     if (isLoading) {
         return (
             <div className="flex justify-center items-center h-[60vh]">
@@ -80,7 +83,7 @@ const BooksPage = () => {
         );
     }
 
-    // ✅ 2. Error State
+    // ✅ 3. Error State UI
     if (isError) {
         return (
             <div className="flex flex-col justify-center items-center h-[60vh] text-center">
@@ -95,9 +98,10 @@ const BooksPage = () => {
         );
     }
 
-    // ✅ 3. Main Return (Normal + Empty State)
+    // ✅ 4. Main Return - Book List or Empty State
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 ">
+            {/* Header with Add Button */}
             <div className="flex justify-between items-center mb-8">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900">Library Books</h1>
@@ -110,6 +114,7 @@ const BooksPage = () => {
                 </Link>
             </div>
 
+            {/* ✅ If no books exist */}
             {books?.length === 0 ? (
                 <div className="text-center py-12">
                     <BookOpen className="mx-auto h-12 w-12 text-gray-400 mb-4" />
@@ -122,11 +127,13 @@ const BooksPage = () => {
                     </Link>
                 </div>
             ) : (
+                // ✅ Book Table View
                 <div className="bg-white shadow-lg rounded-lg overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-200 " >
                             <thead className="bg-gray-50">
                                 <tr>
+                                    {/* Table Headers */}
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Title
                                     </th>
@@ -151,6 +158,7 @@ const BooksPage = () => {
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
+                                {/* Loop over all books */}
                                 {books?.map((book) => (
                                     <tr key={book._id} className="hover:bg-gray-50 transition-colors">
                                         <td className="px-6 py-4 whitespace-nowrap">
@@ -184,12 +192,14 @@ const BooksPage = () => {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div className="flex space-x-2">
+                                                {/* View Book Modal */}
                                                 <Button
                                                     size="sm"
                                                     variant="secondary"
                                                     icon={Eye}
                                                     onClick={() => dispatch(openModal({ type: "view", book: book }))}
                                                 />
+                                                {/* Edit Book Modal */}
                                                 <Button
                                                     size="sm"
                                                     variant="primary"
@@ -198,18 +208,19 @@ const BooksPage = () => {
                                                 />
 
                                                 {/* Borrow Modal */}
-                                                {book.available ?
-                                                    (
-                                                        <Button
-                                                            size="sm"
-                                                            variant="success"
-                                                            icon={BookOpen}
-                                                            onClick={() => dispatch(openModal({ type: "borrow", book: book }))}
-                                                        />
-
-                                                    ) :
-                                                    <Button size="sm" variant="success" icon={BookOpen} onClick={() => { toast.error("Sorry, this book is currently unavailable") }} />
-                                                }
+                                                <Button
+                                                    size="sm"
+                                                    variant="success"
+                                                    icon={BookOpen}
+                                                    onClick={() => {
+                                                        if (book?.available) {
+                                                            dispatch(openModal({ type: "borrow", book: book }))
+                                                        } else {
+                                                            toast.error("Sorry, this book is currently unavailable")
+                                                        }
+                                                    }}
+                                                />
+                                                {/* Delete Book */}
                                                 <Button
                                                     size="sm"
                                                     variant="danger"
@@ -226,6 +237,7 @@ const BooksPage = () => {
                 </div>
             )}
 
+            {/* ✅ Reusable Modal Handler (View, Edit, Borrow) */}
             <BookModals></BookModals>
         </div>
     );

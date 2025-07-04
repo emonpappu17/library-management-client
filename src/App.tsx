@@ -9,14 +9,15 @@ function App() {
   return (
     <>
       <div className="min-h-screen  flex flex-col">
-        <Navbar></Navbar>
 
-        {/* <Outlet></Outlet> */}
+        <Navbar></Navbar>
 
         <div className="flex-1">
           <Outlet></Outlet>
         </div>
+
         <Footer></Footer>
+
         <Toaster
           position="top-right"
           toastOptions={{
@@ -39,6 +40,7 @@ function App() {
             },
           }}
         />
+
       </div>
     </>
   )

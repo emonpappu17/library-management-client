@@ -1,21 +1,19 @@
-// import { BookOpenCheck, Loader2 } from "lucide-react";
 import { BookOpen, Plus } from "lucide-react";
 import { useGetBorrowSummaryQuery } from "../features/borrows/borrowApi";
 import Lottie from "lottie-react";
-// import type { IBorrowSummary } from "../types";
-// import type { IBorrowSummary } from "../types";
-// import { div } from "framer-motion/client";
 import loader from '../assets/loader.json'
 import Button from "../components/ui/Button";
 import { Link } from "react-router";
 
 
 const BorrowSummaryPage = () => {
+    // Fetch borrow summary data using RTK Query
     const { data, isLoading, isError } = useGetBorrowSummaryQuery(undefined);
 
+    // Extract summaries or set as empty array fallback
     const summaries = data?.data || []
 
-    // ✅ 1. Loading State
+    // ✅ 1. Handle loading state with Lottie animation
     if (isLoading) {
         return (
             <div className="flex justify-center items-center h-[60vh]">
@@ -24,7 +22,7 @@ const BorrowSummaryPage = () => {
         );
     }
 
-    // ✅ 2. Error State
+    // ✅ 2. Handle error state
     if (isError) {
         return (
             <div className="flex flex-col justify-center items-center h-[60vh] text-center">
@@ -39,8 +37,10 @@ const BorrowSummaryPage = () => {
         );
     }
 
+    // ✅ 3. Main UI rendering (Empty state or table)
     return (
         <div>
+            {/* Empty state if no borrow summaries exist */}
             {summaries?.length === 0 ?
                 <div className="text-center flex justify-center items-center h-[60vh] px-4">
                     <div>
@@ -55,10 +55,12 @@ const BorrowSummaryPage = () => {
                     </div>
                 </div>
                 : (
+                    // ✅ Borrow summary table view
                     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
                         <h1 className="text-3xl font-bold text-gray-800 mb-2"> Borrow Summary</h1>
                         <p className="text-gray-600 mb-6">Total borrowed quantity for each book</p>
 
+                        {/* Summary Table */}
                         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
                             <div className="overflow-x-auto">
                                 <table className="min-w-full divide-y divide-gray-200 text-sm">
@@ -76,7 +78,7 @@ const BorrowSummaryPage = () => {
                                                     {summary.book.title}
                                                 </td>
                                                 <td className="px-6 py-4 text-gray-600">{summary.book.isbn}</td>
-                                                <td className="px-6 py-4 text-blue-600 font-semibold">{summary.totalQuantity}</td>
+                                                <td className="px-6 py-4 text-gray-600 font-medium">{summary.totalQuantity} copies</td>
                                             </tr>
                                         ))}
                                     </tbody>

@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-// import { api } from "../features/api/api";
 import { booksApi } from "../features/books/bookApi";
 import modalReducer from '../features/modal/modalSlice'
 import { borrowApi } from "../features/borrows/borrowApi";

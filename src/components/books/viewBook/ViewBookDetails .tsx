@@ -11,28 +11,35 @@ const ViewBookDetails = ({ book }: Props) => {
     const dispatch = useAppDispatch();
     return (
         <div className="grid gap-6 text-sm text-gray-800">
+            {/* ✅ Header Section */}
             <div className="text-center">
                 <h2 className="text-2xl font-bold text-gray-900">{book.title}</h2>
                 <p className="text-gray-600 mt-1">View detailed information about this book</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-6 rounded-lg  shadow-sm">
+            {/* ✅ Book Info Section (2-column layout for larger screens) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-6 rounded-lg  shadow-sm  mx-1">
+                {/* Author */}
                 <div>
                     <p className="text-gray-500 font-medium">Author</p>
                     <p className="text-gray-800 font-semibold">{book.author}</p>
                 </div>
+                {/* Genre */}
                 <div>
                     <p className="text-gray-500 font-medium">Genre</p>
                     <p className="text-gray-800 font-semibold">{book.genre}</p>
                 </div>
+                {/* ISBN */}
                 <div>
                     <p className="text-gray-500 font-medium">ISBN</p>
                     <p className="text-gray-800 font-semibold">{book.isbn}</p>
                 </div>
+                {/* Copies */}
                 <div>
                     <p className="text-gray-500 font-medium">Copies</p>
                     <p className="text-gray-800 font-semibold">{book.copies}</p>
                 </div>
+                {/* Availability */}
                 <div>
                     <p className="text-gray-500 font-medium">Availability</p>
                     <p
@@ -42,18 +49,21 @@ const ViewBookDetails = ({ book }: Props) => {
                         {book.available ? "Available" : "Unavailable"}
                     </p>
                 </div>
+                {/* Created At */}
                 {book.createdAt && (
                     <div>
                         <p className="text-gray-500 font-medium">Added On</p>
                         <p className="text-gray-800">{new Date(book.createdAt).toLocaleDateString()}</p>
                     </div>
                 )}
+                {/* Updated At */}
                 {book.updatedAt && (
                     <div>
                         <p className="text-gray-500 font-medium">Last Updated</p>
                         <p className="text-gray-800">{new Date(book.updatedAt).toLocaleDateString()}</p>
                     </div>
                 )}
+                {/* Description (handles long text with scrollable area) */}
                 {book.description && (
                     <div className="sm:col-span-2">
                         <p className="text-gray-500 font-medium mb-1">Description</p>
@@ -63,8 +73,8 @@ const ViewBookDetails = ({ book }: Props) => {
                     </div>
                 )}
             </div>
-
-            <div className="flex justify-end pt-4">
+            {/* ✅ Close Button (Sticky for mobile UX) */}
+            <div className="flex justify-end pt-4 sticky bottom-0 bg-white z-10 pb-4 ">
                 <Button
                     variant="secondary"
                     onClick={() => dispatch(closeModal())}

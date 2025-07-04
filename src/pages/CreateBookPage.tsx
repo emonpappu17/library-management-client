@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import { useAddBookMutation } from "../features/books/bookApi";
 
+// List of book genres - static options for dropdown
 const genres = [
     "FICTION",
     "NON_FICTION",
@@ -18,10 +19,15 @@ const genres = [
 ];
 
 const CreateBookPage = () => {
+    // Local state to track selected genre from dropdown
     const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
+
     const navigate = useNavigate();
+
+    // RTK Query mutation hook to add a new book
     const [addBook, { isLoading }] = useAddBookMutation();
 
+    // React Hook Form setup for form management
     const {
         register,
         handleSubmit,
@@ -30,27 +36,31 @@ const CreateBookPage = () => {
         formState: { errors },
     } = useForm<IAddBook>();
 
-
+    // Form submit handler
     const onSubmit = async (data: IAddBook) => {
+        // Ensure genre is selected
         if (!selectedGenre) {
             toast.error("genre required")
             return;
         }
 
         try {
+            // Combine form values with genre
             const finalData = {
                 ...data,
                 genre: selectedGenre,
             };
 
-            //  mutation function
+            // Call API to add book
             await addBook(finalData).unwrap();
 
+            // Reset form and show success message
             reset();
             setSelectedGenre(null);
             navigate("/books");
             toast.success("Book added successfully!");
         } catch (error) {
+            // Handle API error
             const err = error as { data: { message: string } };
             toast.error(err.data.message || "Something went wrong!")
         }
@@ -59,7 +69,9 @@ const CreateBookPage = () => {
     return (
         <section className=" bg-gray-50 py-10">
             <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* Page Header */}
                 <div className="mb-6">
+                    {/* Back Button */}
                     <Button
                         variant="secondary"
                         icon={ArrowLeft}
@@ -68,10 +80,13 @@ const CreateBookPage = () => {
                     >
                         Back to Books
                     </Button>
+
+                    {/* Heading & Description */}
                     <h1 className="text-3xl font-bold text-gray-900">Add New Book</h1>
                     <p className="mt-2 text-gray-600">Fill in the details to add a new book to the library</p>
                 </div>
 
+                {/* Book Creation Form */}
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="w-full p-6 bg-white rounded-xl shadow-md"
@@ -113,7 +128,7 @@ const CreateBookPage = () => {
                             {errors.isbn && <p className="text-red-500 text-sm mt-1">{errors.isbn.message}</p>}
                         </div>
 
-                        {/* Genre */}
+                        {/* Genre  Dropdown */}
                         <div className="col-span-1">
                             <label className="block text-sm font-medium text-gray-700 mb-2">Genre <span className="text-red-500 ">*</span></label>
                             <Listbox
@@ -130,6 +145,8 @@ const CreateBookPage = () => {
                                         </span>
                                         <ChevronsUpDownIcon className="h-5 w-5 text-gray-500" />
                                     </ListboxButton>
+
+                                    {/* Genre Dropdown Options */}
                                     <ListboxOptions className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg">
                                         {genres.map((genre, i) => (
                                             <ListboxOption
@@ -180,7 +197,7 @@ const CreateBookPage = () => {
                         </div>
                     </div>
 
-                    {/* Submit Button */}
+                    {/* Action Buttons: Reset & Submit */}
                     <div className="mt-6 flex justify-end space-x-3">
                         <Button
                             type="button"

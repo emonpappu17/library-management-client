@@ -12,6 +12,7 @@ interface Props {
     book: IBook;
 }
 
+// ✅ Form data structure for borrowing a book
 interface BorrowData {
     quantity: number;
     dueDate: string;
@@ -19,9 +20,8 @@ interface BorrowData {
 
 const BorrowBookForm = ({ book }: Props) => {
     const dispatch = useAppDispatch();
-
-    const [borrow, { isLoading, }] = useCreateBorrowMutation();
-    const { refetch } = useGetBooksQuery();
+    const [borrow, { isLoading, }] = useCreateBorrowMutation(); // RTK Query mutation hook
+    const { refetch } = useGetBooksQuery(); // Refetch books after successful borrow
 
     const {
         register,
@@ -32,20 +32,21 @@ const BorrowBookForm = ({ book }: Props) => {
 
     const navigate = useNavigate();
 
+    // ✅ Handles form submission logic
     const onSubmit = async (data: BorrowData) => {
         try {
             const borrowData = {
                 ...data,
-                book: book._id,
+                book: book._id, // Include the book ID for backend
             }
 
-            const res = await borrow(borrowData).unwrap();
-            console.log('res borrow-->', res);
+            // ✅ Send borrow request
+            await borrow(borrowData).unwrap();
 
-            refetch();
+            refetch(); // Refresh book list
             reset()
             dispatch(closeModal());
-            navigate("/borrow-summary");
+            navigate("/borrow-summary"); // Redirect to summary page
             toast.success("Book borrowed successfully!");
         } catch (error) {
             const err = error as { data: { message: string } };
@@ -100,7 +101,7 @@ const BorrowBookForm = ({ book }: Props) => {
             </div>
 
             {/* Actions */}
-            <div className="flex justify-end gap-3 pt-2">
+            <div className="flex justify-end gap-3 pt-2 pb-4 sticky bottom-0 bg-white z-10">
                 <Button
                     type="button"
                     variant="secondary"

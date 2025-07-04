@@ -60,13 +60,13 @@ const Navbar = () => {
                 </div>
 
                 <div className="navbar-end">
-                    <div className="dropdown dropdown-end">
+                    <div className="dropdown dropdown-end ">
                         <div tabIndex={0} role="button" className="border-none p-1 btn bg-none lg:hidden">
                             <svg xmlns="http://www.w3.org/2000/svg" className="size-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
                         </div>
                         <ul
                             tabIndex={0}
-                            className="menu menu-sm dropdown-content  rounded-box z-30 mt-3 w-52 p-2 shadow  bg-white space-y-2">
+                            className="menu menu-sm dropdown-content  rounded-2xl z-30 mt-3 w-52 p-2 shadow  bg-white space-y-2 ">
                             {navLinks}
                         </ul>
                     </div>
