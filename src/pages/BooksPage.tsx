@@ -10,11 +10,13 @@ import toast from "react-hot-toast";
 import { useAppDispatch } from "../store/hook";
 import { openModal } from "../features/modal/modalSlice";
 import BookModals from "../components/books/BookModals";
+import { useGetBorrowSummaryQuery } from "../features/borrows/borrowApi";
 
 
 const BooksPage = () => {
     const { data, isLoading, isError } = useGetBooksQuery(undefined);
     const [deleteBook] = useDeleteBookMutation()
+    const { refetch } = useGetBorrowSummaryQuery();
     const books = (data?.data as IBook[]) || [];
 
     console.log(books);
@@ -45,6 +47,7 @@ const BooksPage = () => {
                             timer: 2000,
                             showConfirmButton: false,
                         });
+                        refetch();
                     } else {
                         Swal.fire({
                             title: "Error!",
@@ -181,13 +184,12 @@ const BooksPage = () => {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div className="flex space-x-2">
-                                                <Link to={`/books/${book._id}`}>
-                                                    <Button size="sm" variant="secondary" icon={Eye} />
-
-                                                </Link>
-                                                {/* <Link to={`/edit-book/${book._id}`}>
-                                                    <Button size="sm" variant="primary" icon={Edit} />
-                                                </Link> */}
+                                                <Button
+                                                    size="sm"
+                                                    variant="secondary"
+                                                    icon={Eye}
+                                                    onClick={() => dispatch(openModal({ type: "view", book: book }))}
+                                                />
                                                 <Button
                                                     size="sm"
                                                     variant="primary"
@@ -195,14 +197,9 @@ const BooksPage = () => {
                                                     onClick={() => dispatch(openModal({ type: "edit", book: book }))}
                                                 />
 
-
                                                 {/* Borrow Modal */}
                                                 {book.available ?
                                                     (
-                                                        // <Link to={`/borrow/${book._id}`}>
-                                                        //     <Button size="sm" variant="success" icon={BookOpen} />
-                                                        // </Link>
-
                                                         <Button
                                                             size="sm"
                                                             variant="success"

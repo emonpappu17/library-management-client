@@ -9,9 +9,7 @@ export const store = configureStore({
         modal: modalReducer,
         [booksApi.reducerPath]: booksApi.reducer,
         [borrowApi.reducerPath]: borrowApi.reducer
-        // [api.reducerPath]: api.reducer,
     },
-    // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware)
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(booksApi.middleware, borrowApi.middleware)
 })
 

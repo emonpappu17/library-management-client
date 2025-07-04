@@ -1,12 +1,15 @@
 import { BarChart3, BookOpen, Plus } from "lucide-react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useLocation } from "react-router";
 
 
 const Navbar = () => {
 
+    // const location = useLocation().pathname;
+    // console.log('location', location);
+
     const navLinks = <>
         <NavLink
-            to="/books"
+            to={`/books`}
             className={({ isActive }) =>
                 `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${isActive
                     ? 'bg-blue-600 text-white shadow-md'
