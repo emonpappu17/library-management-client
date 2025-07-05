@@ -9,7 +9,7 @@ const Navbar = () => {
 
     const navLinks = <>
         <NavLink
-            to={`/books`}
+            to={`/books?`}
             className={({ isActive }) =>
                 `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${isActive
                     ? 'bg-blue-600 text-white shadow-md'

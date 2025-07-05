@@ -192,7 +192,7 @@ const CreateBookPage = () => {
                                 {...register("description")}
                                 rows={4}
                                 placeholder="Enter short description"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none "
                             />
                         </div>
                     </div>

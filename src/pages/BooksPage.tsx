@@ -28,51 +28,32 @@ const BooksPage = () => {
 
     // ✅ 1. Handle book deletion with confirmation
     const handleDelete = (id: string, title: string) => {
-        try {
-            Swal.fire({
-                title: "Delete this book?",
-                text: `Are you sure you want to remove "${title}" from the library? This action cannot be undone.`,
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#d33",
-                cancelButtonColor: "#3085d6",
-                confirmButtonText: "Yes, delete it",
-                cancelButtonText: "Cancel",
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    const res = await deleteBook(id).unwrap();
-                    console.log('delete res-->', res);
-                    if (res.success) {
-                        Swal.fire({
-                            title: "Deleted!",
-                            text: `"${title}" has been successfully removed.`,
-                            icon: "success",
-                            timer: 2000,
-                            showConfirmButton: false,
-                        });
-                        refetch();
-                    } else {
-                        Swal.fire({
-                            title: "Error!",
-                            text: "Failed to remove. Please try again.",
-                            icon: "error",
-                            timer: 2000,
-                            showConfirmButton: false,
-                        });
-                    }
+        Swal.fire({
+            title: "Delete this book?",
+            text: `Are you sure you want to remove "${title}" from the library?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it",
+            cancelButtonText: "Cancel",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await deleteBook(id).unwrap();
+
+                    // ✅ refetch the borrow summary
+                    refetch();
+                    toast.success(`"${title}" has been removed`);
+                } catch (error) {
+                    // Handle API error
+                    const err = error as { data: { message: string } };
+                    toast.error(err.data.message || "Failed to delete book. Please try again.")
                 }
-            });
-        } catch (error) {
-            console.log(error);
-            Swal.fire({
-                title: "Error!",
-                text: "Failed to remove. Please try again.",
-                icon: "error",
-                timer: 2000,
-                showConfirmButton: false,
-            });
-        }
-    }
+            }
+        });
+    };
+
 
     // ✅ 2. Loading State UI
     if (isLoading) {
@@ -109,7 +90,7 @@ const BooksPage = () => {
                 </div>
                 <Link to="/create-book">
                     <Button icon={Plus} variant="success">
-                        Add New Book
+                        Add Book
                     </Button>
                 </Link>
             </div>
