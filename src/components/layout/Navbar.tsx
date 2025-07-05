@@ -4,14 +4,14 @@ import { Link, NavLink, useLocation } from "react-router";
 
 const Navbar = () => {
 
-    // const location = useLocation().pathname;
-    // console.log('location', location);
+    const location = useLocation().pathname;
+    const isBooksActive = location === '/' || location === "/books"
 
     const navLinks = <>
         <NavLink
-            to={`/books?`}
-            className={({ isActive }) =>
-                `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${isActive
+            to={`/books`}
+            className={
+                `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${isBooksActive
                     ? 'bg-blue-600 text-white shadow-md'
                     : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
                 }`

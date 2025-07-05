@@ -22,30 +22,6 @@ export const booksApi = createApi({
             invalidatesTags: ["Book"]
         }),
 
-        // ✅ Optimistic deleteBook mutation
-        // deleteBook: builder.mutation<IApiResponse<null>, string>({
-        //     query: (id) => ({
-        //         url: `/books/${id}`,
-        //         method: "DELETE",
-        //     }),
-        //     async onQueryStarted(id, { dispatch, queryFulfilled }) {
-        //         const patchResult = dispatch(
-        //             booksApi.util.updateQueryData("getBooks", undefined, (draft) => {
-        //                 if (draft?.data) {
-        //                     const index = draft.data.findIndex((book) => book._id === id);
-        //                     if (index !== -1) draft.data.splice(index, 1); // 🧹 Optimistically remove
-        //                 }
-        //             })
-        //         );
-
-        //         try {
-        //             await queryFulfilled;
-        //         } catch {
-        //             patchResult.undo(); // 🔄 Rollback if error
-        //         }
-        //     },
-        // }),
-
         // addBook
         addBook: builder.mutation<IApiResponse<IBook>, IAddBook>({
             query: (book) => ({
