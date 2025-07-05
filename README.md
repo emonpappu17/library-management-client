@@ -1,69 +1,81 @@
-# React + TypeScript + Vite
+# Minimal Library Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern and minimal library management system built with **React**, **Redux Toolkit Query**, **TypeScript**, **Tailwind CSS**, and **Node.js + Express + MongoDB**. It enables book management and borrowing without login or payment—focusing on clean design, performance, and core functionality.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Live Demo
 
-## Expanding the ESLint configuration
+**Frontend** 👉 [Library-Management](https://library-management-client-chi.vercel.app/)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+**Backend** 👉 [library-management-server-one-coral.vercel.app](https://library-management-server-one-coral.vercel.app/)
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## Features
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Book Management
+
+- View all books in a table (Title, Author, Genre, ISBN, Copies, Availability, Actions)
+- Add new books
+- Edit books
+- Delete books (with confirmation)
+- Borrow books (with due date & quantity)
+
+> Logic:
+> 
+> - Quantity can't exceed available copies
+> - If `copies === 0`, book becomes unavailable
+
+---
+
+### Borrow Summary
+
+- Aggregated view of all borrowed books
+- Shows: Title | ISBN | Total Quantity Borrowed
+
+---
+
+## Tech Stack
+
+| Layer | Tech |
+| --- | --- |
+| Frontend | React, TypeScript |
+| State | Redux Toolkit + RTK Query |
+| Styling | Tailwind CSS |
+| Backend | Node.js, Express.js |
+| Database | MongoDB + Mongoose |
+| Toast UI | React Hot Toast |
+
+---
+
+## Pages / Routes
+
+- `/books` – Book list view
+- `/create-book` – Add book form
+- `/borrow-summary` – Borrow summary
+
+---
+
+## Setup Instructions
+
+---
+
 ```
+# Clone the repository
+git clone https://github.com/emonpappu17/library-management-client.git
+cd library-management-client
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+# Install dependencies
+npm install
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+# Create a .env file
+cp .env.example .env
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Set environment variables
+VITE_API_URL=http://localhost:5000/api
+MONGODB_URI=your-mongo-db-uri
+
+# Run the command
+npm run dev
 ```

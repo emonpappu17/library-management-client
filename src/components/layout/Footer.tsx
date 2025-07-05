@@ -1,7 +1,5 @@
 import { BookOpenText } from "lucide-react";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-
-
 import { Link } from "react-router";
 
 const Footer = () => {

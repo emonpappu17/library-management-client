@@ -3,7 +3,7 @@ import type { IAddBook, IApiResponse, IBook, IUpdateBook } from '../../types';
 
 export const booksApi = createApi({
     reducerPath: 'booksApi',
-    baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api" }),
+    baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
     tagTypes: ["Book"],
     endpoints: (builder) => ({
 
